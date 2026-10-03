@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Check Before You Share – Year 7</title>
+<style>
+:root{
+  --navy:#1B2A4A; --ink:#16203A; --teal:#1F8F88; --teal-lt:#7FD4CE; --teal-bg:#E6F4F3;
+  --amber:#D98A0B; --amber-lt:#FFF4D6; --bg:#F4F6FA; --card:#FFFFFF; --line:#C9D2E4;
+  --muted:#6B7691; --good:#1E8E4E; --good-lt:#E3F5EA; --bad:#C0392B; --bad-lt:#FBE8E8;
+  --zebra:#EEF2F9; --chat:#E9EDF5;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:Arial,Helvetica,sans-serif;font-size:17px;line-height:1.45}
+button{font:inherit;cursor:pointer}
+.top{background:var(--navy);color:#fff;padding:12px 24px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.brand{font-weight:700;font-size:22px}
+.brand small{display:block;font-size:12px;font-weight:400;color:var(--teal-lt);letter-spacing:1px;text-transform:uppercase}
+.dots{display:flex;gap:8px;margin-left:auto;align-items:center}
+.dot{width:34px;height:34px;border-radius:50%;border:2px solid rgba(255,255,255,.35);color:#c8d0e2;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px}
+.dot.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.dot.right{background:var(--good);border-color:var(--good);color:#fff}
+.dot.wrong{background:var(--bad);border-color:var(--bad);color:#fff}
+.rule{background:var(--teal);color:#fff;text-align:center;padding:8px 16px;font-weight:700;font-size:16px}
+main{max-width:1180px;margin:0 auto;padding:20px 20px 60px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px}
+h1{font-size:27px;color:var(--navy);margin:0 0 8px}
+h2{font-size:22px;color:var(--navy);margin:0 0 10px}
+.kicker{color:var(--teal);font-weight:700;font-size:13px;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+.btn{background:var(--teal);color:#fff;border:0;border-radius:10px;padding:12px 22px;font-weight:700}
+.btn.ghost{background:#fff;color:var(--navy);border:1.5px solid var(--line)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.hidden{display:none!important}
+.grid{display:grid;grid-template-columns:1fr 1.15fr;gap:22px}
+
+/* ---------- the chat */
+.phone{background:var(--chat);border-radius:18px;padding:16px;border:1px solid var(--line)}
+.chathead{display:flex;align-items:center;gap:10px;padding-bottom:10px;border-bottom:1px solid var(--line);margin-bottom:12px}
+.chathead .av{width:38px;height:38px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700}
+.msg{background:#fff;border-radius:4px 16px 16px 16px;padding:12px 14px;box-shadow:0 1px 0 rgba(0,0,0,.05);max-width:100%}
+.msg .who{font-weight:700;color:var(--teal);font-size:15px}
+.fwd{font-size:13px;color:var(--muted);font-style:italic;margin:2px 0 8px}
+.pic{border-radius:12px;min-height:170px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:14px;color:#fff;margin:6px 0 10px}
+.pic .em{font-size:64px;line-height:1}
+.pic .cap{font-size:14px;margin-top:8px;opacity:.95;max-width:340px}
+.posttext{font-size:19px;font-weight:700;color:var(--ink)}
+.meta{font-size:13px;color:var(--muted);margin-top:8px}
+
+/* ---------- the checks */
+.sift{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0}
+.sbtn{background:#fff;border:2px solid var(--teal);border-radius:12px;padding:10px 8px;text-align:center;color:var(--navy)}
+.sbtn b{display:block;font-size:30px;color:var(--teal);line-height:1.1}
+.sbtn span{font-size:13px;font-weight:700}
+.sbtn.used{background:var(--teal-bg)}
+.sbtn:focus{outline:3px solid var(--amber);outline-offset:2px}
+.found{display:flex;flex-direction:column;gap:8px;min-height:40px}
+.fcard{background:var(--teal-bg);border-left:5px solid var(--teal);border-radius:8px;padding:10px 14px;font-size:16px}
+.fcard .h{font-weight:700;color:var(--teal);font-size:13px;letter-spacing:1px;text-transform:uppercase}
+.decide{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:16px}
+.lock{font-size:14px;color:var(--muted)}
+.fb{border-radius:12px;padding:14px 16px;margin-top:14px;font-size:16px}
+.fb.right{background:var(--good-lt);border:2px solid var(--good)}
+.fb.wrong{background:var(--bad-lt);border:2px solid var(--bad)}
+.fb .big{font-size:20px;font-weight:700;margin-bottom:4px}
+.fb.right .big{color:var(--good)} .fb.wrong .big{color:var(--bad)}
+.tell{background:var(--amber-lt);border-left:5px solid var(--amber);border-radius:8px;padding:10px 14px;margin-top:10px;font-weight:700}
+
+/* ---------- end */
+.res{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0}
+.rc{border-radius:12px;padding:12px 14px;border:2px solid var(--line);background:#fff}
+.rc.right{border-color:var(--good);background:var(--good-lt)}
+.rc.wrong{border-color:var(--bad);background:var(--bad-lt)}
+.rc .t{font-weight:700;color:var(--navy)}
+.score{font-size:40px;font-weight:700;color:var(--navy)}
+.q{background:var(--amber-lt);border-radius:10px;padding:14px 16px;margin-top:14px}
+@media (max-width:900px){.grid,.res{grid-template-columns:1fr}.sift{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><small>Year 7 · Lesson 04 · Is it real?</small>Check Before You Share</div>
+  <div class="dots" id="dots" aria-label="Progress"></div>
+</header>
+<div class="rule">Every post here is made up. Nothing you click is sent anywhere or saved.</div>
+
+<main>
+<!-- ============================================= START -->
+<section id="start">
+  <div class="panel">
+    <div class="kicker">How it works</div>
+    <h1>Six posts in Omar's class chat. Would you share them?</h1>
+    <p>Some are real. Some are fake. You cannot tell by looking — so you <b>check</b>.</p>
+    <div class="sift" style="max-width:760px">
+      <div class="sbtn"><b>S</b><span>Stop — how does it make you feel?</span></div>
+      <div class="sbtn"><b>I</b><span>Investigate — who posted it?</span></div>
+      <div class="sbtn"><b>F</b><span>Find — is it anywhere else?</span></div>
+      <div class="sbtn"><b>T</b><span>Trace — where is the original?</span></div>
+    </div>
+    <p>Use <b>at least two</b> checks on each post. Then the <b>Share it</b> and <b>Don't share it</b> buttons unlock.</p>
+    <p class="small muted">Pairs: one person clicks, one person reads. The reader decides — and says which check settled it.</p>
+    <button class="btn" onclick="go(0)">Start with post 1</button>
+  </div>
+</section>
+
+<!-- ============================================= POST -->
+<section id="post" class="hidden">
+  <div class="grid">
+    <div class="phone">
+      <div class="chathead"><div class="av">7B</div><div><b>7B Class Chat</b><div class="small muted">32 members</div></div></div>
+      <div class="msg">
+        <div class="who" id="who"></div>
+        <div class="fwd" id="fwd"></div>
+        <div class="pic" id="pic"><div class="em" id="em"></div><div class="cap" id="cap"></div></div>
+        <div class="posttext" id="ptext"></div>
+        <div class="meta" id="pmeta"></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="kicker" id="pnum"></div>
+      <h2>Check it before you decide</h2>
+      <div class="sift" id="siftBtns"></div>
+      <div class="found" id="found"></div>
+      <div class="decide">
+        <button class="btn" id="bShare" onclick="decide(true)" disabled>Share it</button>
+        <button class="btn" id="bNo" onclick="decide(false)" disabled style="background:var(--bad)">Don't share it</button>
+        <span class="lock" id="lock">Use two checks to unlock.</span>
+      </div>
+      <div id="fb"></div>
+      <div class="decide"><button class="btn ghost hidden" id="bNext" onclick="next()">Next post →</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================= END -->
+<section id="end" class="hidden">
+  <div class="panel">
+    <div class="kicker">Finished</div>
+    <h1>How did you do?</h1>
+    <div class="score" id="score"></div>
+    <p id="checksLine"></p>
+    <div class="res" id="res"></div>
+    <p><b>Now fill in Part 3 of your worksheet:</b> one line per post — share it or not, and the check that decided it.</p>
+    <div class="q"><b>Finished early?</b> Which post would have been hardest to check <i>without</i> the buttons? Why? Talk to your partner, then add it under Part 3.</div>
+    <p style="margin-top:16px"><button class="btn ghost" onclick="restart()">Try again from the start</button></p>
+  </div>
+</section>
+</main>
+
+<script>
+const NAMES = {S:"Stop", I:"Investigate the source", F:"Find other coverage", T:"Trace the original"};
+const POSTS = [
+ { title:"The lion", who:"Yousef", fwd:"Forwarded from @DohaBreakingNow",
+   em:"🦁", bg:"linear-gradient(135deg,#C98B3B,#7A5230)",
+   cap:"Photo: a lioness walking along a road, with Aspire Tower behind it",
+   text:"🚨 LION ESCAPED NEAR ASPIRE PARK!!! Stay inside!!! Share with everyone!!!",
+   meta:"Shared 214 times",
+   S:"Scared. Worried about your family. That strong feeling is what makes people share before they think. Slow down.",
+   I:"@DohaBreakingNow was made 3 days ago. It has 12 followers and no other posts. It is not a news organisation anyone has heard of.",
+   F:"Nothing. No news website, no police account and no zoo account mentions a lion. Something this big would be everywhere.",
+   T:"A picture search finds the same image on an AI art page, posted a month ago. Its caption says: “lion in the city — made with AI”.",
+   real:false,
+   why:"It is AI-generated. The account is brand new, nobody else is reporting it, and the original is on an AI art page. 214 shares only shows how many people were fooled."},
+ { title:"School closed tomorrow", who:"Maryam", fwd:"Forwarded from AlWaha_Sch00l_News",
+   em:"🏫", bg:"linear-gradient(135deg,#3B6FB6,#1B2A4A)",
+   cap:"Screenshot: the school logo, with big white writing on top",
+   text:"OFFICIAL: School is CLOSED tomorrow because of the heat. No lessons! 😎",
+   meta:"Shared 58 times",
+   S:"Excited — a day off! When you WANT something to be true, you check less. Slow down.",
+   I:"Look closely at the name: AlWaha_Sch00l_News uses two zeros, not the letter O. The account was made yesterday and has 40 followers.",
+   F:"The school website and the class Team say nothing. The real school account posted today's lunch menu an hour ago, and nothing else.",
+   T:"The logo is copied from the school website. The writing was added on top.",
+   real:false,
+   why:"It is a look-alike account. Anybody can make an account with any name and any logo. The real school says nothing about a closure."},
+ { title:"Whale sharks", who:"Omar", fwd:"Forwarded from Dr Noor — marine scientist",
+   em:"🐋", bg:"linear-gradient(135deg,#1F8F88,#0E4F5C)",
+   cap:"Video: giant spotted sharks swimming slowly beside a boat",
+   text:"Huge whale sharks gather off Qatar's coast — over 100 seen this week! 🌊",
+   meta:"Shared 31 times",
+   S:"Amazed! A strong feeling, so slow down and check. But amazing does not mean fake.",
+   I:"Dr Noor is a marine scientist at a university. She has posted sea-life videos for six years, always with the place and the date.",
+   F:"Two news websites have reported it. Whale sharks really do gather off Qatar's coast every summer — it is one of the biggest groups in the world.",
+   T:"This is the original video, filmed from a research boat. It gives the date and the place it was filmed.",
+   real:true,
+   why:"It is real. A scientist with a long record, other news sites reporting it, and the original video with a date and a place. Surprising things can be true — that is why we check instead of guessing."},
+ { title:"The footballer's voice note", who:"Ali", fwd:"Forwarded from @FootyBanterKing",
+   em:"🎤", bg:"linear-gradient(135deg,#6B4FA0,#2E2257)",
+   cap:"Voice note, 0:14 — sounds exactly like a famous footballer",
+   text:"“It's me. I'm leaving my club and joining a Qatari team next week. Tell everyone!”",
+   meta:"Shared 120 times",
+   S:"Shocked, or excited if it is your team. Big news makes people forward first and think later.",
+   I:"@FootyBanterKing is a joke fan page. Its bio says “parody — memes and banter”.",
+   F:"No club, no player account and no sports news site mentions it.",
+   T:"There is no original. Later the same page posted: “made this with an AI voice app 😂”.",
+   real:false,
+   why:"It is a fake voice made with AI. A voice can be copied from a few seconds of someone talking. A joke page, no other reports and no original."},
+ { title:"A classmate at the mall", who:"Unknown number", fwd:"Forwarded from @laughs_77",
+   em:"📷", bg:"linear-gradient(135deg,#8D97AF,#4A5570)",
+   cap:"Photo: a boy from your class, splashing into the fountain at the mall",
+   text:"😂😂😂 look at Hamad at the mall",
+   meta:"Shared 9 times",
+   S:"It might make you laugh. Then think how Hamad feels when the whole class sees it.",
+   I:"@laughs_77 has no name and no profile picture. It was made this week.",
+   F:"Nobody else posted it. Hamad's friends who were there say it never happened.",
+   T:"Hamad's own photo from that day shows him just standing by the fountain. Someone edited him into the water.",
+   real:false, tell:true,
+   why:"It is an edited picture of a real person, made to laugh at him. Do not share it — not even to say it is fake."},
+ { title:"Sports day moved", who:"Ms Fatima (class teacher)", fwd:"Posted in the 7B class Team",
+   em:"🏃", bg:"linear-gradient(135deg,#D98A0B,#9A5E05)",
+   cap:"Notice: sports day, with the new date",
+   text:"Sports day has moved to Thursday because of the weather forecast. Please bring water and a cap.",
+   meta:"Posted in the class Team",
+   S:"A bit disappointed, maybe. No strong feeling — and no rush.",
+   I:"It is your class teacher, posting in your real class Team — the same place your homework comes from.",
+   F:"The school also emailed the same message to parents this morning.",
+   T:"This is the original. Nobody forwarded it from somewhere else.",
+   real:true,
+   why:"It is real. A person you know, in the place they always post, and the same message sent to parents. Checking is not the same as believing nothing."}
+];
+
+let i = 0, used = {}, results = [];
+
+function show(id){ ["start","post","end"].forEach(s=>document.getElementById(s).classList.toggle("hidden", s!==id)); window.scrollTo(0,0); }
+
+function drawDots(){
+  const d = document.getElementById("dots"); d.innerHTML = "";
+  POSTS.forEach((p,k)=>{
+    const e = document.createElement("div"); e.className = "dot"; e.textContent = k+1;
+    if (results[k] === true) e.classList.add("right");
+    else if (results[k] === false) e.classList.add("wrong");
+    else if (k === i && !document.getElementById("post").classList.contains("hidden")) e.classList.add("on");
+    d.appendChild(e);
+  });
+}
+
+function go(k){
+  i = k; used = {}; const p = POSTS[i];
+  show("post");
+  document.getElementById("pnum").textContent = "Post " + (i+1) + " of " + POSTS.length;
+  document.getElementById("who").textContent = p.who;
+  document.getElementById("fwd").textContent = p.fwd;
+  document.getElementById("em").textContent = p.em;
+  document.getElementById("cap").textContent = p.cap;
+  document.getElementById("pic").style.background = p.bg;
+  document.getElementById("ptext").textContent = p.text;
+  document.getElementById("pmeta").textContent = p.meta;
+  const sb = document.getElementById("siftBtns"); sb.innerHTML = "";
+  ["S","I","F","T"].forEach(L=>{
+    const b = document.createElement("button"); b.className = "sbtn";
+    b.innerHTML = "<b>"+L+"</b><span>"+NAMES[L]+"</span>";
+    b.onclick = ()=>check(L,b); sb.appendChild(b);
+  });
+  document.getElementById("found").innerHTML = "";
+  document.getElementById("fb").innerHTML = "";
+  document.getElementById("bNext").classList.add("hidden");
+  setLock();
+  drawDots();
+}
+
+function check(L,b){
+  if (used[L] || results[i] !== undefined) return;
+  used[L] = true; b.classList.add("used");
+  const c = document.createElement("div"); c.className = "fcard";
+  c.innerHTML = '<div class="h">'+L+' · '+NAMES[L]+'</div>';
+  const t = document.createElement("div"); t.textContent = POSTS[i][L]; c.appendChild(t);
+  document.getElementById("found").appendChild(c);
+  setLock();
+}
+
+function setLock(){
+  const n = Object.keys(used).length, done = results[i] !== undefined;
+  const ok = n >= 2 && !done;
+  document.getElementById("bShare").disabled = !ok;
+  document.getElementById("bNo").disabled = !ok;
+  const l = document.getElementById("lock");
+  if (done) l.textContent = "";
+  else if (n >= 2) l.textContent = "Unlocked. Reader: say why before you click.";
+  else l.textContent = "Use " + (2-n) + " more check" + (2-n===1?"":"s") + " to unlock.";
+}
+
+function decide(share){
+  const p = POSTS[i];
+  const right = (share === p.real);
+  results[i] = right;
+  POSTS[i].checks = Object.keys(used).length;
+  const fb = document.getElementById("fb");
+  let h = '<div class="fb '+(right?'right':'wrong')+'"><div class="big">'+
+          (right ? "Right — " : "Not this time — ") + (p.real ? "this one is real." : "this one is fake.") +
+          '</div><div></div></div>';
+  fb.innerHTML = h;
+  fb.querySelector(".fb > div:last-child").textContent = p.why;
+  if (p.tell){
+    const t = document.createElement("div"); t.className = "tell";
+    t.textContent = "If this happened for real: do not share it. Screenshot it, and tell an adult you trust. Next lesson is about exactly this.";
+    fb.appendChild(t);
+  }
+  setLock();
+  const nb = document.getElementById("bNext");
+  nb.textContent = (i === POSTS.length-1) ? "See my score →" : "Next post →";
+  nb.classList.remove("hidden");
+  drawDots();
+}
+
+function next(){
+  if (i < POSTS.length-1) go(i+1); else finish();
+}
+
+function finish(){
+  show("end"); drawDots();
+  const s = results.filter(x=>x).length;
+  document.getElementById("score").textContent = s + " / " + POSTS.length;
+  const total = POSTS.reduce((a,p)=>a+(p.checks||0),0);
+  document.getElementById("checksLine").textContent =
+    "You used " + total + " checks across six posts. Two of the six were real — checking is how you tell which.";
+  const r = document.getElementById("res"); r.innerHTML = "";
+  POSTS.forEach((p,k)=>{
+    const c = document.createElement("div"); c.className = "rc " + (results[k] ? "right" : "wrong");
+    const t = document.createElement("div"); t.className = "t"; t.textContent = (k+1) + "  " + p.title;
+    const v = document.createElement("div"); v.className = "small";
+    v.textContent = (p.real ? "REAL — fine to share." : "FAKE — do not share.") + (results[k] ? "  You got it." : "  You missed this one.");
+    c.appendChild(t); c.appendChild(v); r.appendChild(c);
+  });
+}
+
+function restart(){ results = []; POSTS.forEach(p=>delete p.checks); show("start"); drawDots(); }
+
+drawDots();
+document.addEventListener("keydown", e=>{
+  if (document.getElementById("post").classList.contains("hidden")) return;
+  const k = e.key.toUpperCase();
+  if (["S","I","F","T"].includes(k)){
+    const b = [...document.querySelectorAll("#siftBtns .sbtn")].find(x=>x.querySelector("b").textContent===k);
+    if (b) check(k,b);
+  }
+});
+</script>
+</body>
+</html>
